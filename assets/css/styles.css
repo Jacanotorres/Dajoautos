@@ -591,6 +591,12 @@ footer.site{background:var(--ink);border-top:1px solid var(--line-on-dark);paddi
 .panel-photo .cover-badge{display:none;background:var(--gold-grad);color:var(--ink);}
 .panel-photo .make-cover{background:rgba(0,0,0,0.72);color:var(--cream);border:1px solid var(--line-gold);cursor:pointer;}
 .panel-photo .make-cover:hover{border-color:var(--gold);color:var(--gold-light);}
+/* Con mouse, "Hacer portada" solo aparece al pasar sobre la foto; en
+   pantallas táctiles queda siempre visible porque no hay "pasar encima". */
+@media (hover:hover){
+  .panel-photos .panel-photo .make-cover{opacity:0;transition:opacity .15s ease;}
+  .panel-photos .panel-photo:hover .make-cover, .panel-photos .panel-photo .make-cover:focus-visible{opacity:1;}
+}
 /* La primera de la lista es la portada */
 .panel-photos .panel-photo:first-child{border-color:var(--gold);box-shadow:0 0 0 1px var(--gold);}
 .panel-photos .panel-photo:first-child .cover-badge{display:block;}
