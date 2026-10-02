@@ -79,16 +79,13 @@ document.addEventListener("DOMContentLoaded", function(){
     el.textContent = new Date().getFullYear();
   });
 
-  /* Enlace de "Iniciar sesión" del header: si ya hay sesión, se
-     convierte en "Panel". Se protege con typeof por si la página no
-     cargó el cliente de Supabase. */
+  /* Botón "Panel" del header: viene oculto y solo se muestra cuando hay
+     una sesión abierta. Se protege con typeof por si la página no cargó
+     el cliente de Supabase. */
   const authLink = document.getElementById("header-auth-link");
   if(authLink && typeof supabaseClient !== "undefined"){
     supabaseClient.auth.getSession().then(function(res){
-      if(res.data.session){
-        authLink.textContent = "Panel";
-        authLink.href = "panel.html";
-      }
+      if(res.data.session) authLink.hidden = false;
     });
   }
 
