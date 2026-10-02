@@ -2,36 +2,17 @@
    Dajoautos — catálogo: tarjetas, filtros, orden
    ========================================================= */
 
-function vehicleBadges(v){
-  let out = "";
-  if(v.oportunidad) out += '<span class="tag tag-oportunidad">Oportunidad</span>';
-  if(v.destacado) out += '<span class="tag tag-nuevo">Recién llegado</span>';
-  return out;
-}
-
 function renderVehicleCard(v){
-  const badges = vehicleBadges(v);
-  const priceBlock = v.oportunidad && v.precioAnterior
-    ? '<span class="old">' + formatPrice(v.precioAnterior) + '</span>' + formatPrice(v.precio)
-    : formatPrice(v.precio);
   const photo = (v.fotos && v.fotos[0])
     ? '<img src="' + v.fotos[0] + '" alt="' + v.marca + ' ' + v.linea + '" loading="lazy">'
     : carIconSVG();
   return (
     '<a class="vehicle-card" href="vehiculo.html?id=' + v.id + '">' +
-      '<div class="vehicle-photo">' +
-        '<div class="vehicle-badges">' + badges + '</div>' +
-        photo +
-      '</div>' +
+      '<div class="vehicle-photo">' + photo + '</div>' +
       '<div class="vehicle-body">' +
         '<h3>' + v.marca + ' ' + v.linea + '</h3>' +
-        '<p class="price">' + priceBlock + '</p>' +
-        '<div class="vehicle-specs">' +
-          '<span>' + v.modelo + '</span>' +
-          '<span>' + formatKm(v.km) + '</span>' +
-          '<span>' + v.combustible + '</span>' +
-          '<span>' + v.color + '</span>' +
-        '</div>' +
+        '<div class="vehicle-specs"><span>' + v.modelo + '</span></div>' +
+        '<p class="price">' + formatPrice(v.precio) + '</p>' +
         '<div class="vehicle-actions">' +
           '<span class="btn btn-primary btn-sm" style="pointer-events:none;">Ver vehículo</span>' +
         '</div>' +
@@ -73,17 +54,12 @@ async function initInventoryPage(){
     anio: document.getElementById("f-anio"),
     precioMin: document.getElementById("f-precio-min"),
     precioMax: document.getElementById("f-precio-max"),
-    km: document.getElementById("f-km"),
-    combustible: document.getElementById("f-combustible"),
-    color: document.getElementById("f-color"),
     sort: document.getElementById("f-sort"),
     reset: document.getElementById("f-reset"),
     count: document.getElementById("results-count")
   };
 
   fillSelect(els.marca, uniqueSorted(disponibles.map(function(v){ return v.marca; })), "Todas las marcas");
-  fillSelect(els.combustible, uniqueSorted(disponibles.map(function(v){ return v.combustible; })), "Todos");
-  fillSelect(els.color, uniqueSorted(disponibles.map(function(v){ return v.color; })), "Todos los colores");
 
   function currentFilters(){
     return {
@@ -91,10 +67,7 @@ async function initInventoryPage(){
       linea: (els.linea.value || "").trim().toLowerCase(),
       anio: els.anio.value,
       precioMin: parseFloat(els.precioMin.value) || null,
-      precioMax: parseFloat(els.precioMax.value) || null,
-      km: parseFloat(els.km.value) || null,
-      combustible: els.combustible.value,
-      color: els.color.value
+      precioMax: parseFloat(els.precioMax.value) || null
     };
   }
 
@@ -106,22 +79,13 @@ async function initInventoryPage(){
       if(f.anio && String(v.modelo) !== f.anio) return false;
       if(f.precioMin && v.precio < f.precioMin) return false;
       if(f.precioMax && v.precio > f.precioMax) return false;
-      if(f.km && v.km > f.km) return false;
-      if(f.combustible && v.combustible !== f.combustible) return false;
-      if(f.color && v.color !== f.color) return false;
       return true;
     });
 
+    /* "Más recientes" es el orden en que ya llegan desde Supabase */
     const sortKey = els.sort.value;
-    list = list.slice().sort(function(a,b){
-      switch(sortKey){
-        case "precio-asc": return a.precio - b.precio;
-        case "precio-desc": return b.precio - a.precio;
-        case "km-asc": return a.km - b.km;
-        case "km-desc": return b.km - a.km;
-        default: return new Date(b.fechaIngreso) - new Date(a.fechaIngreso);
-      }
-    });
+    if(sortKey === "precio-asc") list = list.slice().sort(function(a,b){ return a.precio - b.precio; });
+    if(sortKey === "precio-desc") list = list.slice().sort(function(a,b){ return b.precio - a.precio; });
 
     renderGrid(grid, list);
     if(els.count) els.count.textContent = list.length + (list.length === 1 ? " vehículo disponible" : " vehículos disponibles");
@@ -138,7 +102,7 @@ async function initInventoryPage(){
     els.reset.addEventListener("click", function(){
       Object.keys(els).forEach(function(key){
         const el = els[key];
-        if(!el || key === "reset" || key === "count") return;
+        if(!el || key === "reset" || key === "count" || key === "sort") return;
         el.value = "";
       });
       applyFilters();
@@ -147,32 +111,18 @@ async function initInventoryPage(){
 
   /* Prefiltros vía URL */
   const params = new URLSearchParams(window.location.search);
-  if(params.get("tipo") === "oportunidad"){
-    renderGrid(grid, disponibles.filter(function(v){ return v.oportunidad; }));
-    if(els.count) els.count.textContent = "Mostrando vehículos con precio especial";
-    return;
-  }
   if(params.get("marca")) els.marca.value = params.get("marca");
   if(params.get("precioMax")) els.precioMax.value = params.get("precioMax");
   applyFilters();
 }
 
-/* ---------- Widgets de inicio ---------- */
+/* ---------- Inicio: los últimos vehículos publicados ---------- */
 async function initHomeWidgets(){
   const recientes = document.getElementById("recientes-grid");
-  const oportunidades = document.getElementById("oportunidades-grid");
-  if(!recientes && !oportunidades) return;
+  if(!recientes) return;
 
   const vehicles = await fetchVehicles();
-
-  if(recientes){
-    const list = vehicles.filter(function(v){ return v.destacado; }).slice(0,8);
-    fillOrHideSection(recientes, list.map(renderVehicleCard).join(""));
-  }
-  if(oportunidades){
-    const list = vehicles.filter(function(v){ return v.oportunidad; }).slice(0,6);
-    fillOrHideSection(oportunidades, list.map(renderVehicleCard).join(""));
-  }
+  fillOrHideSection(recientes, vehicles.slice(0,8).map(renderVehicleCard).join(""));
 }
 
 document.addEventListener("DOMContentLoaded", function(){

@@ -252,6 +252,7 @@ section{padding:76px 0;}
 }
 .search-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
 .search-row.row-2{grid-template-columns:repeat(2,1fr);}
+.search-row.row-3{grid-template-columns:repeat(3,1fr);}
 .field{display:flex;flex-direction:column;gap:6px;}
 .field label{font-size:13px;font-weight:700;color:var(--muted-on-dark);}
 .field select, .field input{
@@ -264,8 +265,12 @@ section{padding:76px 0;}
 .results-count{color:var(--muted-on-dark);font-size:15px;}
 .sort-field{display:flex;align-items:center;gap:10px;}
 .sort-field label{font-size:14px;color:var(--muted-on-dark);font-weight:700;}
-@media (max-width:900px){ .search-row{grid-template-columns:repeat(2,1fr);} }
-@media (max-width:560px){ .search-row{grid-template-columns:1fr;} }
+.sort-field select{
+  border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;font-family:'Karla';
+  font-size:14px;background:var(--ink);color:var(--cream);
+}
+@media (max-width:900px){ .search-row, .search-row.row-3{grid-template-columns:repeat(2,1fr);} }
+@media (max-width:560px){ .search-row, .search-row.row-2, .search-row.row-3{grid-template-columns:1fr;} }
 
 /* ---------- Vehicle cards / grid ---------- */
 .vehicle-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;}
@@ -343,6 +348,7 @@ section{padding:76px 0;}
   font-family:'Barlow Condensed';font-weight:800;font-size:clamp(28px,4vw,36px);
   padding:6px 20px;border-radius:10px;line-height:1.2;
 }
+.veh-desc{white-space:pre-line;color:var(--charcoal);font-size:16.5px;line-height:1.65;}
 .veh-cta-line{font-weight:800;color:var(--cream);font-size:17px;margin-bottom:16px !important;}
 .spec-table{width:100%;border-collapse:collapse;margin-top:18px;}
 .spec-table tr{border-bottom:1px solid var(--line);}
@@ -572,12 +578,14 @@ footer.site{background:var(--ink);border-top:1px solid var(--line-on-dark);paddi
 .panel-card input[type="number"],
 .panel-card input[type="date"],
 .panel-card input[type="email"],
-.panel-card input[type="password"]{
+.panel-card input[type="password"],
+.panel-card textarea{
   width:100%;padding:12px 14px;border:1.5px solid var(--line);border-radius:10px;
   font-family:'Karla',sans-serif;font-size:15px;background:var(--ink);color:var(--cream);
 }
-.panel-card input::placeholder{color:var(--dim-on-dark);}
-.panel-card input:focus{border-color:var(--gold-deep);outline:none;}
+.panel-card textarea{resize:vertical;min-height:130px;line-height:1.5;}
+.panel-card input::placeholder, .panel-card textarea::placeholder{color:var(--dim-on-dark);}
+.panel-card input:focus, .panel-card textarea:focus{border-color:var(--gold-deep);outline:none;}
 .panel-card input[type="checkbox"]{width:18px;height:18px;accent-color:var(--gold);}
 .panel-card .form-grid label[style]{margin-bottom:0;text-transform:none;font-size:15px;color:var(--charcoal);}
 .panel-card input[type="file"]{

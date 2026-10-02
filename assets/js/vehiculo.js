@@ -7,12 +7,6 @@ function specRow(label, value){
   return "<tr><td>" + label + "</td><td>" + value + "</td></tr>";
 }
 
-function vigenciaLabel(value){
-  if(value === "N/A") return "N/A";
-  if(value === "VENCIDO") return '<span style="color:var(--red);font-weight:800;">Vencido</span>';
-  return "Vence " + value;
-}
-
 async function renderVehicleDetail(){
   const root = document.getElementById("vehicle-detail");
   if(!root) return;
@@ -33,7 +27,7 @@ async function renderVehicleDetail(){
     return;
   }
 
-  document.title = v.marca + " " + v.linea + " — Dajoautos";
+  document.title = v.marca + " " + v.linea + " " + v.modelo + " — Dajoautos";
 
   const fotos = v.fotos || [];
   const galleryHTML = fotos.length > 0
@@ -43,23 +37,13 @@ async function renderVehicleDetail(){
             return '<div class="' + (i === 0 ? "active" : "") + '" data-src="' + src + '"><img src="' + src + '" alt="' + v.marca + ' ' + v.linea + ' foto ' + (i + 1) + '" loading="lazy"></div>';
           }).join("") + '</div>'
         : "")
-    : '<div class="veh-gallery-main">' + carIconSVG() + '</div>' +
-      '<div class="veh-gallery-thumbs">' + Array.from({length:6}).map(function(){ return "<div>" + carIconSVG() + "</div>"; }).join("") + '</div>' +
-      '<p class="placeholder-note" style="margin-top:14px;">Fotografías de ejemplo. Aquí irán las fotos reales del vehículo.</p>';
+    : '<div class="veh-gallery-main">' + carIconSVG() + '</div>';
 
-  const oldPriceHTML = (v.oportunidad && v.precioAnterior)
-    ? '<span class="old">' + formatPrice(v.precioAnterior) + '</span>'
-    : "";
-
-  let badges = "";
-  if(v.oportunidad) badges += '<span class="tag tag-oportunidad">Oportunidad</span>';
-  if(v.destacado) badges += '<span class="tag tag-nuevo">Recién llegado</span>';
-
-  const waText = "Hola, quiero más información del " + v.marca + " " + v.linea + " " + v.modelo + " (placa " + v.placa + ")";
+  const waText = "Hola, quiero más información del " + v.marca + " " + v.linea + " " + v.modelo;
   const contactHTML = WHATSAPP_NUMBER
     ? '<p class="veh-cta-line">¿Te interesa este vehículo? Escríbenos ahora.</p>' +
       '<a class="btn btn-green" href="' + waLink(waText) + '" target="_blank" rel="noopener">Hablar por WhatsApp</a>' +
-      '<a class="btn btn-ghost" href="' + waLink("Hola, quiero programar una visita para ver el " + v.marca + " " + v.linea) + '" target="_blank" rel="noopener">Programar visita</a>' +
+      '<a class="btn btn-ghost" href="' + waLink("Hola, quiero programar una visita para ver el " + v.marca + " " + v.linea + " " + v.modelo) + '" target="_blank" rel="noopener">Programar visita</a>' +
       '<p style="margin-top:16px;margin-bottom:0;font-size:13.5px;">Uno de nuestros asesores puede darte más información, enviarte fotos adicionales o ayudarte a programar una visita.</p>'
     : '<a class="btn btn-primary" href="contacto.html">Contáctanos</a>';
 
@@ -68,37 +52,34 @@ async function renderVehicleDetail(){
       '<div>' +
         galleryHTML +
 
+        (v.descripcion
+          ? '<div style="margin-top:44px;">' +
+              '<h2 style="font-size:26px;margin-bottom:16px;">Descripción</h2>' +
+              '<p class="veh-desc" id="veh-desc"></p>' +
+            '</div>'
+          : "") +
+
         '<div style="margin-top:44px;">' +
           '<h2 style="font-size:26px;margin-bottom:16px;">Información del vehículo</h2>' +
           '<table class="spec-table">' +
             specRow("Marca", v.marca) +
-            specRow("Línea", v.linea) +
-            specRow("Versión", v.version) +
-            specRow("Modelo", v.modelo) +
-            specRow("Kilometraje", formatKm(v.km)) +
-            specRow("Combustible", v.combustible) +
-            specRow("Color", v.color) +
-            specRow("Cilindraje", v.cilindraje) +
-            specRow("Placa", v.placa) +
-            specRow("SOAT", vigenciaLabel(v.soatVence)) +
-            specRow("Revisión técnico-mecánica", vigenciaLabel(v.tecnoVence)) +
+            specRow("Modelo", v.linea) +
+            specRow("Año", v.modelo) +
           '</table>' +
         '</div>' +
       '</div>' +
 
       '<aside class="veh-sidebar">' +
-        '<div class="veh-badges">' + badges + '</div>' +
         '<h1 style="font-size:26px;margin-bottom:4px;">' + v.marca + ' ' + v.linea + '</h1>' +
-        '<div class="veh-quick-specs">' +
-          '<span>' + v.modelo + '</span>' +
-          '<span>' + formatKm(v.km) + '</span>' +
-          '<span>' + v.combustible + '</span>' +
-          '<span>' + v.color + '</span>' +
-        '</div>' +
-        '<div class="veh-price-wrap">' + oldPriceHTML + '<span class="veh-price">' + formatPrice(v.precio) + '</span></div>' +
+        '<div class="veh-quick-specs"><span>' + v.modelo + '</span></div>' +
+        '<div class="veh-price-wrap"><span class="veh-price">' + formatPrice(v.precio) + '</span></div>' +
         contactHTML +
       '</aside>' +
     '</div>';
+
+  /* La descripción es texto libre del panel: se pone como texto, no como HTML */
+  const desc = document.getElementById("veh-desc");
+  if(desc) desc.textContent = v.descripcion;
 
   if(fotos.length > 1){
     const mainPhoto = document.getElementById("veh-main-photo");

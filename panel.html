@@ -50,9 +50,9 @@
         <div class="panel-table-wrap" style="margin-top:18px;">
           <table class="panel-table">
             <thead><tr>
-              <th>Vehículo</th><th>Modelo</th><th>Precio</th><th>Km</th><th>Placa</th><th>Etiquetas</th><th></th>
+              <th>Vehículo</th><th>Año</th><th>Precio</th><th></th>
             </tr></thead>
-            <tbody id="vehicles-tbody"><tr><td colspan="7" class="panel-empty">Cargando...</td></tr></tbody>
+            <tbody id="vehicles-tbody"><tr><td colspan="4" class="panel-empty">Cargando...</td></tr></tbody>
           </table>
         </div>
       </div>
@@ -62,29 +62,17 @@
         <form id="vehicle-form">
           <input type="hidden" id="v-id">
           <div class="form-grid">
-            <div><label for="v-marca">Marca</label><input id="v-marca" type="text" required></div>
-            <div><label for="v-linea">Línea</label><input id="v-linea" type="text" required></div>
-            <div><label for="v-version">Versión (opcional)</label><input id="v-version" type="text"></div>
-            <div><label for="v-modelo">Modelo (año)</label><input id="v-modelo" type="number" required></div>
-            <div><label for="v-precio">Precio</label><input id="v-precio" type="number" required></div>
-            <div><label for="v-precio-anterior">Precio anterior (oportunidad)</label><input id="v-precio-anterior" type="number"></div>
-            <div><label for="v-km">Kilometraje</label><input id="v-km" type="number" required></div>
-            <div><label for="v-combustible">Combustible</label><input id="v-combustible" type="text" required></div>
-            <div><label for="v-color">Color</label><input id="v-color" type="text" required></div>
-            <div><label for="v-cilindraje">Cilindraje</label><input id="v-cilindraje" type="text"></div>
-            <div><label for="v-placa">Placa</label><input id="v-placa" type="text" required></div>
-            <div><label for="v-fecha-ingreso">Fecha de ingreso</label><input id="v-fecha-ingreso" type="date" required></div>
-            <div><label for="v-soat">SOAT vence</label><input id="v-soat" type="text" placeholder="AAAA-MM-DD, VENCIDO o N/A"></div>
-            <div><label for="v-tecno">Tecnomecánica vence</label><input id="v-tecno" type="text" placeholder="AAAA-MM-DD, VENCIDO o N/A"></div>
-            <div class="full" style="display:flex;gap:24px;align-items:center;">
-              <label style="display:flex;align-items:center;gap:8px;margin:0;"><input id="v-destacado" type="checkbox" style="width:auto;"> Recién llegado</label>
-              <label style="display:flex;align-items:center;gap:8px;margin:0;"><input id="v-oportunidad" type="checkbox" style="width:auto;"> Oportunidad</label>
-            </div>
+            <div><label for="v-marca">Marca</label><input id="v-marca" type="text" required placeholder="Ej: Mazda"></div>
+            <div><label for="v-linea">Modelo</label><input id="v-linea" type="text" required placeholder="Ej: CX-5 Grand Touring"></div>
+            <div><label for="v-modelo">Año</label><input id="v-modelo" type="number" required min="1950" max="2100" placeholder="Ej: 2022"></div>
+            <div><label for="v-precio">Precio</label><input id="v-precio" type="number" required min="0" placeholder="Ej: 85000000"></div>
+            <div class="full"><label for="v-descripcion">Descripción</label><textarea id="v-descripcion" rows="6" placeholder="Kilometraje, estado, equipamiento y lo que quieras contar del vehículo."></textarea></div>
           </div>
           <div class="panel-actions" style="margin-top:22px;">
             <button type="submit" class="btn btn-primary">Guardar</button>
             <button type="button" class="btn btn-ghost" id="btn-cancel-vehicle">Cancelar</button>
           </div>
+          <p class="form-note" id="vehicle-photos-hint">Al guardar aparecerá aquí abajo la sección para subir las fotos.</p>
         </form>
 
         <div id="vehicle-photos-wrap" hidden style="margin-top:28px;border-top:1px solid var(--line);padding-top:22px;">
@@ -201,17 +189,10 @@
      ========================================================= */
   let vehicles = [];
 
-  function vehicleTags(v){
-    let out = "";
-    if(v.destacado) out += '<span class="tag tag-nuevo" style="margin-right:6px;">Recién llegado</span>';
-    if(v.oportunidad) out += '<span class="tag tag-oportunidad">Oportunidad</span>';
-    return out || "—";
-  }
-
   function renderVehiclesTable(){
     const tbody = document.getElementById("vehicles-tbody");
     if(vehicles.length === 0){
-      tbody.innerHTML = '<tr><td colspan="7" class="panel-empty">Todavía no hay vehículos.</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="4" class="panel-empty">Todavía no hay vehículos.</td></tr>';
       return;
     }
     tbody.innerHTML = vehicles.map(function(v){
@@ -219,9 +200,6 @@
         '<td>' + v.marca + ' ' + v.linea + '</td>' +
         '<td>' + v.modelo + '</td>' +
         '<td>' + formatPrice(v.precio) + '</td>' +
-        '<td>' + formatKm(v.km) + '</td>' +
-        '<td>' + v.placa + '</td>' +
-        '<td>' + vehicleTags(v) + '</td>' +
         '<td><div class="panel-actions">' +
           '<button class="btn btn-ghost btn-sm" data-edit="' + v.id + '">Editar</button>' +
           '<button class="btn btn-ghost btn-sm" data-delete="' + v.id + '">Eliminar</button>' +
@@ -258,22 +236,14 @@
     document.getElementById("v-id").value = v ? v.id : "";
     document.getElementById("v-marca").value = v ? v.marca : "";
     document.getElementById("v-linea").value = v ? v.linea : "";
-    document.getElementById("v-version").value = (v && v.version) || "";
     document.getElementById("v-modelo").value = v ? v.modelo : "";
     document.getElementById("v-precio").value = v ? v.precio : "";
-    document.getElementById("v-precio-anterior").value = (v && v.precioAnterior) || "";
-    document.getElementById("v-km").value = v ? v.km : "";
-    document.getElementById("v-combustible").value = v ? v.combustible : "";
-    document.getElementById("v-color").value = v ? v.color : "";
-    document.getElementById("v-cilindraje").value = (v && v.cilindraje) || "";
-    document.getElementById("v-placa").value = v ? v.placa : "";
-    document.getElementById("v-fecha-ingreso").value = v ? v.fechaIngreso : new Date().toISOString().slice(0,10);
-    document.getElementById("v-soat").value = (v && v.soatVence) || "";
-    document.getElementById("v-tecno").value = (v && v.tecnoVence) || "";
-    document.getElementById("v-destacado").checked = v ? !!v.destacado : false;
-    document.getElementById("v-oportunidad").checked = v ? !!v.oportunidad : false;
+    document.getElementById("v-descripcion").value = v ? v.descripcion : "";
 
+    /* Las fotos se cuelgan de un vehículo ya guardado: al crear uno nuevo
+       se muestra el aviso y la sección de fotos aparece después de guardar. */
     const photosWrap = document.getElementById("vehicle-photos-wrap");
+    document.getElementById("vehicle-photos-hint").hidden = !!v;
     if(v){
       photosWrap.hidden = false;
       renderVehiclePhotos(v.id);
@@ -299,39 +269,31 @@
     const marca = document.getElementById("v-marca").value.trim();
     const linea = document.getElementById("v-linea").value.trim();
     const modelo = parseInt(document.getElementById("v-modelo").value, 10);
-    const placa = document.getElementById("v-placa").value.trim().toUpperCase();
 
+    /* En la tabla, "linea" es el modelo del carro y "modelo" es el año. */
     const payload = {
       marca: marca,
       linea: linea,
-      version: document.getElementById("v-version").value.trim() || null,
       modelo: modelo,
       precio: parseInt(document.getElementById("v-precio").value, 10),
-      precio_anterior: document.getElementById("v-precio-anterior").value ? parseInt(document.getElementById("v-precio-anterior").value, 10) : null,
-      km: parseInt(document.getElementById("v-km").value, 10),
-      combustible: document.getElementById("v-combustible").value.trim(),
-      color: document.getElementById("v-color").value.trim(),
-      cilindraje: document.getElementById("v-cilindraje").value.trim() || null,
-      placa: placa,
-      soat_vence: document.getElementById("v-soat").value.trim() || null,
-      tecno_vence: document.getElementById("v-tecno").value.trim() || null,
-      destacado: document.getElementById("v-destacado").checked,
-      oportunidad: document.getElementById("v-oportunidad").checked,
-      fecha_ingreso: document.getElementById("v-fecha-ingreso").value
+      descripcion: document.getElementById("v-descripcion").value.trim() || null
     };
 
     let error;
     if(editingVehicleId){
       ({ error } = await supabaseClient.from("vehicles").update(payload).eq("id", editingVehicleId));
     } else {
-      const id = slugify(marca + "-" + linea + "-" + modelo + "-" + placa);
+      /* Sin placa, el id lleva un sufijo al azar para que dos carros iguales no choquen */
+      const id = slugify(marca + "-" + linea + "-" + modelo) + "-" + Math.random().toString(36).slice(2,7);
       payload.id = id;
+      payload.fecha_ingreso = new Date().toISOString().slice(0,10);
       ({ error } = await supabaseClient.from("vehicles").insert(payload));
-      editingVehicleId = id;
+      if(!error) editingVehicleId = id;
     }
     if(error){ alert("No se pudo guardar: " + error.message); return; }
 
     await loadVehicles();
+    document.getElementById("vehicle-photos-hint").hidden = true;
     document.getElementById("vehicle-photos-wrap").hidden = false;
     renderVehiclePhotos(editingVehicleId);
     document.getElementById("vehicle-form-title").textContent = "Editar vehículo";

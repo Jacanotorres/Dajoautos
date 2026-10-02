@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Inventario de vehículos — Dajoautos</title>
-<meta name="description" content="Explora el inventario disponible de Dajoautos. Filtra por marca, línea, año, precio, kilometraje y más.">
+<meta name="description" content="Explora el inventario disponible de Dajoautos. Filtra por marca, modelo, año y precio.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -37,24 +37,21 @@
   <div class="wrap">
     <p class="kicker">Nuestro inventario</p>
     <h1>Encuentra tu próximo carro</h1>
-    <p>Filtra por marca, línea, año, precio, kilometraje, combustible y color para encontrar el vehículo que mejor se adapte a ti.</p>
+    <p>Filtra por marca, modelo, año y precio para encontrar el vehículo que mejor se adapte a ti.</p>
   </div>
 </section>
 
 <section class="section-tight">
   <div class="wrap">
     <div class="search-panel">
-      <div class="search-row">
+      <div class="search-row row-3">
         <div class="field"><label for="f-marca">Marca</label><select id="f-marca"></select></div>
-        <div class="field"><label for="f-linea">Línea o modelo</label><input id="f-linea" type="text" placeholder="Ej: Fortuner, Q3..."></div>
+        <div class="field"><label for="f-linea">Modelo</label><input id="f-linea" type="text" placeholder="Ej: CX-5, Fortuner..."></div>
         <div class="field"><label for="f-anio">Año</label><input id="f-anio" type="number" placeholder="Ej: 2022"></div>
-        <div class="field"><label for="f-combustible">Combustible</label><select id="f-combustible"></select></div>
       </div>
-      <div class="search-row">
+      <div class="search-row row-2">
         <div class="field"><label for="f-precio-min">Precio mínimo</label><input id="f-precio-min" type="number" placeholder="$"></div>
         <div class="field"><label for="f-precio-max">Precio máximo</label><input id="f-precio-max" type="number" placeholder="$"></div>
-        <div class="field"><label for="f-km">Kilometraje máximo</label><input id="f-km" type="number" placeholder="Ej: 80000"></div>
-        <div class="field"><label for="f-color">Color</label><select id="f-color"></select></div>
       </div>
       <div class="search-actions" style="justify-content:flex-end;">
         <button id="f-reset" class="btn btn-ghost" type="button">Limpiar filtros</button>
@@ -69,8 +66,6 @@
           <option value="recientes">Más recientes</option>
           <option value="precio-asc">Menor precio</option>
           <option value="precio-desc">Mayor precio</option>
-          <option value="km-asc">Menor kilometraje</option>
-          <option value="km-desc">Mayor kilometraje</option>
         </select>
       </div>
     </div>
@@ -101,7 +96,6 @@
       <div class="footer-col"><h4>Vehículos</h4><ul>
         <li><a href="inventario.html">Inventario</a></li>
         <li><a href="index.html#recien-llegados">Recién llegados</a></li>
-        <li><a href="index.html#oportunidades">Oportunidades</a></li>
       </ul></div>
       <div class="footer-col"><h4>Empresa</h4><ul>
         <li><a href="nosotros.html">Nosotros</a></li>

@@ -5,9 +5,11 @@
    felices se leen (y se administran desde panel.html) en Supabase.
    ========================================================= */
 
-/* Convierte una fila de la tabla "vehicles" (+ sus vehicle_photos)
-   al mismo formato de objeto que usaban catalog.js y vehiculo.js
-   cuando los vehículos vivían en el arreglo VEHICLES. */
+/* Convierte una fila de la tabla "vehicles" (+ sus vehicle_photos) al
+   objeto que usan catalog.js, vehiculo.js y el panel.
+   Dajoautos publica cada carro solo con marca, modelo, año, descripción
+   y precio. OJO con los nombres de la tabla: la columna "linea" guarda el
+   modelo (ej. "Mazda 3") y la columna "modelo" guarda el año. */
 function normalizeVehicle(row){
   const fotos = (row.vehicle_photos || [])
     .slice()
@@ -17,19 +19,9 @@ function normalizeVehicle(row){
     id: row.id,
     marca: row.marca,
     linea: row.linea,
-    version: row.version,
     modelo: row.modelo,
     precio: row.precio,
-    precioAnterior: row.precio_anterior,
-    km: row.km,
-    combustible: row.combustible,
-    color: row.color,
-    cilindraje: row.cilindraje,
-    placa: row.placa,
-    soatVence: row.soat_vence,
-    tecnoVence: row.tecno_vence,
-    destacado: row.destacado,
-    oportunidad: row.oportunidad,
+    descripcion: row.descripcion || "",
     fechaIngreso: row.fecha_ingreso,
     fotos: fotos
   };
@@ -39,7 +31,8 @@ async function fetchVehicles(){
   const { data, error } = await supabaseClient
     .from("vehicles")
     .select("*, vehicle_photos(url, posicion)")
-    .order("fecha_ingreso", { ascending: false });
+    .order("fecha_ingreso", { ascending: false })
+    .order("updated_at", { ascending: false });
   if(error){
     console.error("Error cargando el inventario:", error);
     return [];
