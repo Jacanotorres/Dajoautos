@@ -9,8 +9,8 @@
    sitio: sus botones, enlaces y bloques se ocultan solos (main.js).
    ========================================================= */
 
-const WHATSAPP_NUMBER = "";        // solo dígitos con indicativo, ej. "573001234567"
-const CONTACT_PHONE_DISPLAY = "";  // como se muestra, ej. "+57 300 123 4567"
+const WHATSAPP_NUMBER = "573173315431";             // solo dígitos, con indicativo del país
+const CONTACT_PHONE_DISPLAY = "+57 317 331 5431";  // como se muestra en el sitio
 const CONTACT_EMAIL = "";
 const CONTACT_ADDRESS = "";        // dirección de la sede
 const CONTACT_HOURS = "";          // ej. "Lunes a sábado, 8:00 a.m. – 6:00 p.m."
