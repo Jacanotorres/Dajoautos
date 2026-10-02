@@ -56,6 +56,12 @@ async function renderVehicleDetail(){
   if(v.destacado) badges += '<span class="tag tag-nuevo">Recién llegado</span>';
 
   const waText = "Hola, quiero más información del " + v.marca + " " + v.linea + " " + v.modelo + " (placa " + v.placa + ")";
+  const contactHTML = WHATSAPP_NUMBER
+    ? '<p class="veh-cta-line">¿Te interesa este vehículo? Escríbenos ahora.</p>' +
+      '<a class="btn btn-green" href="' + waLink(waText) + '" target="_blank" rel="noopener">Hablar por WhatsApp</a>' +
+      '<a class="btn btn-ghost" href="' + waLink("Hola, quiero programar una visita para ver el " + v.marca + " " + v.linea) + '" target="_blank" rel="noopener">Programar visita</a>' +
+      '<p style="margin-top:16px;margin-bottom:0;font-size:13.5px;">Uno de nuestros asesores puede darte más información, enviarte fotos adicionales o ayudarte a programar una visita.</p>'
+    : '<a class="btn btn-primary" href="contacto.html">Contáctanos</a>';
 
   root.innerHTML =
     '<div class="veh-detail">' +
@@ -90,10 +96,7 @@ async function renderVehicleDetail(){
           '<span>' + v.color + '</span>' +
         '</div>' +
         '<div class="veh-price-wrap">' + oldPriceHTML + '<span class="veh-price">' + formatPrice(v.precio) + '</span></div>' +
-        '<p class="veh-cta-line">¿Te interesa este vehículo? Escríbenos ahora.</p>' +
-        '<a class="btn btn-green" href="' + waLink(waText) + '" target="_blank" rel="noopener">Hablar por WhatsApp</a>' +
-        '<a class="btn btn-ghost" href="' + waLink("Hola, quiero programar una visita para ver el " + v.marca + " " + v.linea) + '" target="_blank" rel="noopener">Programar visita</a>' +
-        '<p style="margin-top:16px;margin-bottom:0;font-size:13.5px;">Uno de nuestros asesores puede darte más información, enviarte fotos adicionales o ayudarte a programar una visita.</p>' +
+        contactHTML +
       '</aside>' +
     '</div>';
 

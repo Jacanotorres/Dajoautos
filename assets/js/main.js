@@ -23,28 +23,55 @@ document.addEventListener("DOMContentLoaded", function(){
     nav.querySelectorAll("a").forEach(function(a){ a.addEventListener("click", closeNav); });
   }
 
-  /* Enlaces de WhatsApp con texto predefinido (data-wa-text) */
+  /* Enlaces de WhatsApp con texto predefinido (data-wa-text). Sin número
+     configurado se ocultan, igual que los textos que hablan de WhatsApp
+     (data-wa-only). */
   document.querySelectorAll("[data-wa-text]").forEach(function(a){
-    a.href = waLink(a.getAttribute("data-wa-text"));
+    if(WHATSAPP_NUMBER) a.href = waLink(a.getAttribute("data-wa-text"));
+    else a.hidden = true;
   });
+  if(!WHATSAPP_NUMBER){
+    document.querySelectorAll("[data-wa-only]").forEach(function(el){ el.hidden = true; });
+  }
 
-  /* Enlaces a redes sociales / mapa (data-social="instagram|tiktok|facebook|maps") */
+  /* Enlaces a redes sociales / mapa (data-social="instagram|tiktok|facebook|maps").
+     Los que no tienen enlace se ocultan junto con su tarjeta o ítem de lista. */
   document.querySelectorAll("[data-social]").forEach(function(a){
-    a.href = SOCIAL_LINKS[a.getAttribute("data-social")];
+    const url = SOCIAL_LINKS[a.getAttribute("data-social")];
+    if(url) a.href = url;
+    else (a.closest(".social-card, li") || a).hidden = true;
   });
 
-  /* Teléfono / correo de contacto inyectados donde se pidan */
-  document.querySelectorAll("[data-contact-phone]").forEach(function(el){
-    el.textContent = CONTACT_PHONE_DISPLAY;
+  /* Datos de contacto: data-contact="phone|email|address|hours" pone el
+     texto y data-contact-href="phone|email" arma el enlace tel:/mailto:. */
+  const contactText = {
+    phone: CONTACT_PHONE_DISPLAY, email: CONTACT_EMAIL,
+    address: CONTACT_ADDRESS, hours: CONTACT_HOURS
+  };
+  const contactHref = {
+    phone: WHATSAPP_NUMBER ? "tel:+" + WHATSAPP_NUMBER : "",
+    email: CONTACT_EMAIL ? "mailto:" + CONTACT_EMAIL : ""
+  };
+  document.querySelectorAll("[data-contact]").forEach(function(el){
+    const text = contactText[el.getAttribute("data-contact")];
+    if(text) el.textContent = text;
+    else el.hidden = true;
   });
-  document.querySelectorAll("[data-contact-phone-href]").forEach(function(el){
-    el.href = "tel:+" + WHATSAPP_NUMBER;
+  document.querySelectorAll("[data-contact-href]").forEach(function(el){
+    const href = contactHref[el.getAttribute("data-contact-href")];
+    if(href) el.href = href;
+    else el.hidden = true;
   });
-  document.querySelectorAll("[data-contact-email]").forEach(function(el){
-    el.textContent = CONTACT_EMAIL;
-  });
-  document.querySelectorAll("[data-contact-email-href]").forEach(function(el){
-    el.href = "mailto:" + CONTACT_EMAIL;
+
+  /* Bloques que solo tienen sentido si les quedó algún dato visible
+     (data-hide-if-empty). Si el atributo trae el id de otro elemento,
+     ese se muestra en su lugar. */
+  document.querySelectorAll("[data-hide-if-empty]").forEach(function(box){
+    const items = Array.from(box.querySelectorAll("[data-wa-text],[data-social],[data-contact]"));
+    if(items.some(function(el){ return !el.closest("[hidden]"); })) return;
+    box.hidden = true;
+    const fallback = document.getElementById(box.getAttribute("data-hide-if-empty"));
+    if(fallback) fallback.hidden = false;
   });
 
   /* Año dinámico en el footer */
@@ -86,6 +113,15 @@ function renderClientPhotos(list){
       : photoIconSVG();
     return '<div class="team-photo">' + inner + '</div>';
   }).join("");
+}
+
+/* Para las secciones que se llenan desde Supabase (clientes, equipo,
+   recién llegados...): si no hay nada que mostrar, se oculta la sección
+   completa en vez de dejar el título con un espacio vacío. */
+function fillOrHideSection(container, html){
+  if(!container) return;
+  if(html) container.innerHTML = html;
+  else container.closest("section").hidden = true;
 }
 
 /* Icono de cámara reutilizable para fotos de clientes sin imagen aún */

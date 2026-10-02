@@ -167,11 +167,11 @@ async function initHomeWidgets(){
 
   if(recientes){
     const list = vehicles.filter(function(v){ return v.destacado; }).slice(0,8);
-    renderGrid(recientes, list);
+    fillOrHideSection(recientes, list.map(renderVehicleCard).join(""));
   }
   if(oportunidades){
     const list = vehicles.filter(function(v){ return v.oportunidad; }).slice(0,6);
-    renderGrid(oportunidades, list);
+    fillOrHideSection(oportunidades, list.map(renderVehicleCard).join(""));
   }
 }
 

@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Inventario de vehículos — Dajoautos</title>
-<meta name="description" content="Explora el inventario disponible de Dajoautos en Cali. Filtra por marca, línea, año, precio, kilometraje, ciudad y más.">
+<meta name="description" content="Explora el inventario disponible de Dajoautos. Filtra por marca, línea, año, precio, kilometraje y más.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -15,7 +15,7 @@
 <header class="site">
   <div class="wrap">
     <a class="brand" href="index.html">
-      <img src="assets/img/logo.png" alt="Dajoautos" class="brand-logo">
+      <img src="assets/img/logo.webp" alt="Dajoautos" class="brand-logo">
     </a>
     <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false"><span></span></button>
     <nav class="main-nav">
@@ -25,7 +25,7 @@
       <a href="contacto.html">Contacto</a>
     </nav>
     <div class="header-actions">
-      <div class="header-phone"><span>Escríbenos ahora</span><strong data-contact-phone></strong></div>
+      <div class="header-phone" data-hide-if-empty><span>Escríbenos ahora</span><strong data-contact="phone"></strong></div>
       <a id="header-auth-link" class="btn btn-ghost btn-sm" href="login.html" style="margin-right:8px;">Iniciar sesión</a>
       <a class="btn btn-primary" data-wa-text="Hola, quiero más información sobre el inventario" target="_blank" rel="noopener">WhatsApp</a>
     </div>
@@ -33,7 +33,7 @@
 </header>
 <div class="nav-scrim"></div>
 
-<section class="page-hero has-photo" style="--hero-photo:url('/assets/img/hero-fachada2.jpeg')">
+<section class="page-hero">
   <div class="wrap">
     <p class="kicker">Nuestro inventario</p>
     <h1>Encuentra tu próximo carro</h1>
@@ -79,7 +79,7 @@
   </div>
 </section>
 
-<section class="cta">
+<section class="cta" data-hide-if-empty>
   <div class="wrap">
     <h2>¿No encuentras lo que buscas?</h2>
     <p>Cuéntanos qué vehículo necesitas y tu presupuesto. Te ayudamos a encontrar opciones.</p>
@@ -94,9 +94,9 @@
     <div class="footer-grid">
       <div class="footer-brand">
         <a class="brand" href="index.html">
-          <img src="assets/img/logo.png" alt="Dajoautos" class="brand-logo">
+          <img src="assets/img/logo.webp" alt="Dajoautos" class="brand-logo">
         </a>
-        <p>En efectivo y al instante. Compra y venta de vehículos usados en Cali, Colombia.</p>
+        <p>Tu próximo vehículo está aquí.</p>
       </div>
       <div class="footer-col"><h4>Vehículos</h4><ul>
         <li><a href="inventario.html">Inventario</a></li>
@@ -105,24 +105,23 @@
       </ul></div>
       <div class="footer-col"><h4>Empresa</h4><ul>
         <li><a href="nosotros.html">Nosotros</a></li>
-        <li><a href="nosotros.html#historia">Nuestra historia</a></li>
         <li><a href="nosotros.html#clientes-felices">Clientes felices</a></li>
         <li><a href="nosotros.html#equipo">Nuestro equipo</a></li>
       </ul></div>
       <div class="footer-col"><h4>Contacto</h4><ul>
         <li><a href="vende-tu-carro.html">Vende tu carro</a></li>
-        <li><a href="vende-tu-carro.html">Cotiza tu vehículo</a></li>
-        <li><a href="contacto.html">Agenda una valoración</a></li>
+        <li><a href="contacto.html">Contáctanos</a></li>
       </ul></div>
-      <div class="footer-col"><h4>Síguenos</h4><ul>
-        <li><a href="#pendiente-instagram" target="_blank" rel="noopener">Instagram</a></li>
-        <li><a href="#pendiente-tiktok" target="_blank" rel="noopener">TikTok</a></li>
-        <li><a href="#pendiente-facebook" target="_blank" rel="noopener">Facebook</a></li>
+      <div class="footer-col" data-hide-if-empty><h4>Síguenos</h4><ul>
+        <li><a data-social="instagram" target="_blank" rel="noopener">Instagram</a></li>
+        <li><a data-social="tiktok" target="_blank" rel="noopener">TikTok</a></li>
+        <li><a data-social="facebook" target="_blank" rel="noopener">Facebook</a></li>
       </ul></div>
     </div>
     <div class="footer-bottom">
-      <p>© <span data-year></span> Dajoautos · Cali, Colombia</p>
+      <p>© <span data-year></span> Dajoautos</p>
       <div class="footer-legal">
+        <a href="login.html">Acceso interno</a>
         <a href="#">Política de privacidad</a>
         <a href="#">Tratamiento de datos personales</a>
         <a href="#">Términos y condiciones</a>
@@ -137,18 +136,18 @@
 
 <div class="float-stack float-stack-left">
   <a class="float-btn" data-social="tiktok" target="_blank" rel="noopener" aria-label="Síguenos en TikTok">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M14 3v10.5a3.5 3.5 0 1 1-2.5-3.36" stroke="#FEF102" stroke-width="1.8" stroke-linecap="round"/><path d="M14 3c.4 2.2 2 3.8 4.2 4" stroke="#FEF102" stroke-width="1.8" stroke-linecap="round"/></svg>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M14 3v10.5a3.5 3.5 0 1 1-2.5-3.36" stroke="#DDAE4C" stroke-width="1.8" stroke-linecap="round"/><path d="M14 3c.4 2.2 2 3.8 4.2 4" stroke="#DDAE4C" stroke-width="1.8" stroke-linecap="round"/></svg>
   </a>
   <a class="float-btn" data-social="facebook" target="_blank" rel="noopener" aria-label="Síguenos en Facebook">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M14 8.5h2V5.5h-2c-1.9 0-3.2 1.4-3.2 3.4v1.8H9v3h1.8V21h3v-7.3h2l.5-3h-2.5V9.2c0-.5.3-.7.7-.7Z" fill="#FEF102"/></svg>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M14 8.5h2V5.5h-2c-1.9 0-3.2 1.4-3.2 3.4v1.8H9v3h1.8V21h3v-7.3h2l.5-3h-2.5V9.2c0-.5.3-.7.7-.7Z" fill="#DDAE4C"/></svg>
   </a>
   <a class="float-btn" data-social="instagram" target="_blank" rel="noopener" aria-label="Síguenos en Instagram">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="#FEF102" stroke-width="1.8"/><circle cx="12" cy="12" r="4" stroke="#FEF102" stroke-width="1.8"/><circle cx="17.2" cy="6.8" r="1.1" fill="#FEF102"/></svg>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="5" stroke="#DDAE4C" stroke-width="1.8"/><circle cx="12" cy="12" r="4" stroke="#DDAE4C" stroke-width="1.8"/><circle cx="17.2" cy="6.8" r="1.1" fill="#DDAE4C"/></svg>
   </a>
 </div>
 
 <a class="float-maps" data-social="maps" target="_blank" rel="noopener" aria-label="Cómo llegar en Google Maps">
-  <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21Z" stroke="#FEF102" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="9.5" r="2.4" stroke="#FEF102" stroke-width="1.8"/></svg>
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 21s7-6.1 7-11.5A7 7 0 0 0 5 9.5C5 14.9 12 21 12 21Z" stroke="#DDAE4C" stroke-width="1.8" stroke-linejoin="round"/><circle cx="12" cy="9.5" r="2.4" stroke="#DDAE4C" stroke-width="1.8"/></svg>
 </a>
 
 

@@ -4,17 +4,22 @@
    (ver assets/js/db.js) y se administran desde panel.html. Aquí solo
    queda la configuración fija del sitio (contacto, redes) y los
    helpers que usan varias páginas.
+
+   Un dato que se deje vacío ("") simplemente no se muestra en el
+   sitio: sus botones, enlaces y bloques se ocultan solos (main.js).
    ========================================================= */
 
-const WHATSAPP_NUMBER = "570000000000";
-const CONTACT_PHONE_DISPLAY = "+57 000 000 0000";
-const CONTACT_EMAIL = "PENDIENTE@dajoautos.com";
+const WHATSAPP_NUMBER = "";        // solo dígitos con indicativo, ej. "573001234567"
+const CONTACT_PHONE_DISPLAY = "";  // como se muestra, ej. "+57 300 123 4567"
+const CONTACT_EMAIL = "";
+const CONTACT_ADDRESS = "";        // dirección de la sede
+const CONTACT_HOURS = "";          // ej. "Lunes a sábado, 8:00 a.m. – 6:00 p.m."
 
 const SOCIAL_LINKS = {
-  instagram: "#pendiente-instagram",
-  tiktok: "#pendiente-tiktok",
-  facebook: "#pendiente-facebook",
-  maps: "#pendiente-maps"
+  instagram: "",
+  tiktok: "",
+  facebook: "",
+  maps: ""
 };
 
 function waLink(message){
