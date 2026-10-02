@@ -12,14 +12,17 @@
 const WHATSAPP_NUMBER = "573173315431";             // solo dígitos, con indicativo del país
 const CONTACT_PHONE_DISPLAY = "+57 317 331 5431";  // como se muestra en el sitio
 const CONTACT_EMAIL = "";
-const CONTACT_ADDRESS = "";        // dirección de la sede
+const CONTACT_ADDRESS = "Av. 9ª A Nte. #16N - 34, Granada, Cali, Valle del Cauca";
 const CONTACT_HOURS = "";          // ej. "Lunes a sábado, 8:00 a.m. – 6:00 p.m."
 
+/* El mapa apunta a las coordenadas de la sede y no a una ficha de Google
+   Maps: en esa dirección la ficha que existe es de otro negocio. Cuando
+   Dajoautos tenga su propia ficha, se cambia por ese enlace. */
 const SOCIAL_LINKS = {
-  instagram: "",
-  tiktok: "",
+  instagram: "https://www.instagram.com/dajoautoscali/",
+  tiktok: "https://www.tiktok.com/@dajoautoscali",
   facebook: "",
-  maps: ""
+  maps: "https://www.google.com/maps/search/?api=1&query=3.4613099,-76.5337598"
 };
 
 function waLink(message){
