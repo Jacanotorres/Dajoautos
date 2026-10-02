@@ -25,6 +25,10 @@ const SOCIAL_LINKS = {
   maps: "https://www.google.com/maps/search/?api=1&query=3.4613099,-76.5337598"
 };
 
+/* Mapa incrustado de la página de contacto (mismas coordenadas, por la
+   misma razón). Vacío = no se muestra el mapa. */
+const MAP_EMBED_URL = "https://www.google.com/maps?q=3.4613099,-76.5337598&z=16&output=embed";
+
 function waLink(message){
   return "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(message);
 }

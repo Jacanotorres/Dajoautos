@@ -74,6 +74,12 @@ document.addEventListener("DOMContentLoaded", function(){
     if(fallback) fallback.hidden = false;
   });
 
+  /* Mapa incrustado (iframe data-map-embed) */
+  document.querySelectorAll("[data-map-embed]").forEach(function(frame){
+    if(MAP_EMBED_URL) frame.src = MAP_EMBED_URL;
+    else frame.closest(".map-frame").hidden = true;
+  });
+
   /* Año dinámico en el footer */
   document.querySelectorAll("[data-year]").forEach(function(el){
     el.textContent = new Date().getFullYear();
