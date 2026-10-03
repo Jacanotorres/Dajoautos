@@ -76,3 +76,16 @@ async function fetchHappyClients(){
   }
   return data.map(function(c){ return { foto: c.foto }; });
 }
+
+/* Galería del concesionario (página "Nosotros"): fotos y videos en orden */
+async function fetchGallery(){
+  const { data, error } = await supabaseClient
+    .from("gallery")
+    .select("*")
+    .order("orden", { ascending: true });
+  if(error){
+    console.error("Error cargando la galería:", error);
+    return [];
+  }
+  return data;
+}

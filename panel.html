@@ -38,6 +38,7 @@
       <button class="panel-tab active" data-tab="inventario">Inventario</button>
       <button class="panel-tab" data-tab="equipo" id="tab-btn-equipo" hidden>Equipo</button>
       <button class="panel-tab" data-tab="clientes" id="tab-btn-clientes" hidden>Clientes felices</button>
+      <button class="panel-tab" data-tab="galeria" id="tab-btn-galeria" hidden>Galería</button>
     </div>
 
     <!-- ===================== INVENTARIO ===================== -->
@@ -133,6 +134,24 @@
       </div>
     </div>
 
+
+    <!-- ===================== GALERÍA ===================== -->
+    <div class="panel-section" id="tab-galeria">
+      <div class="panel-card">
+        <div class="panel-header">
+          <h3 style="margin:0;">Galería del concesionario</h3>
+        </div>
+        <p class="form-note">Fotos y videos que se muestran en la página "Nosotros". Arrastra para ordenarlos. Videos en MP4 de hasta 50 MB.</p>
+        <div class="photo-drop" id="g-drop" role="button" tabindex="0" style="margin-top:14px;">
+          <strong>Agregar fotos o videos</strong>
+          <span>Toca aquí o arrastra los archivos. Puedes elegir varios a la vez.</span>
+        </div>
+        <input type="file" id="g-input" accept="image/*,video/*" multiple hidden>
+        <p class="form-note" id="g-status" hidden></p>
+        <div class="panel-photos" id="g-grid"></div>
+      </div>
+    </div>
+
   </div>
 </section>
 
@@ -156,6 +175,7 @@
   if(isAdmin){
     document.getElementById("tab-btn-equipo").hidden = false;
     document.getElementById("tab-btn-clientes").hidden = false;
+    document.getElementById("tab-btn-galeria").hidden = false;
   }
 
   /* ---------- Tabs ---------- */
@@ -462,20 +482,28 @@
     e.target.value = "";
   });
 
-  photoDrop.addEventListener("click", function(){ photoInput.click(); });
-  photoDrop.addEventListener("keydown", function(e){
-    if(e.key === "Enter" || e.key === " "){ e.preventDefault(); photoInput.click(); }
-  });
-  ["dragenter","dragover"].forEach(function(type){
-    photoDrop.addEventListener(type, function(e){ e.preventDefault(); photoDrop.classList.add("dragover"); });
-  });
-  ["dragleave","drop"].forEach(function(type){
-    photoDrop.addEventListener(type, function(e){ e.preventDefault(); photoDrop.classList.remove("dragover"); });
-  });
-  photoDrop.addEventListener("drop", function(e){
-    const files = Array.from(e.dataTransfer.files || []).filter(function(f){ return f.type.indexOf("image/") === 0; });
-    addVehiclePhotos(files);
-  });
+/* Recuadro para elegir o soltar archivos: abre el selector al tocarlo y
+     entrega los archivos soltados encima que pasen el filtro "accept". */
+  function wireDropZone(drop, input, accept, onFiles){
+    drop.addEventListener("click", function(){ input.click(); });
+    drop.addEventListener("keydown", function(e){
+      if(e.key === "Enter" || e.key === " "){ e.preventDefault(); input.click(); }
+    });
+    ["dragenter","dragover"].forEach(function(type){
+      drop.addEventListener(type, function(e){ e.preventDefault(); drop.classList.add("dragover"); });
+    });
+    ["dragleave","drop"].forEach(function(type){
+      drop.addEventListener(type, function(e){ e.preventDefault(); drop.classList.remove("dragover"); });
+    });
+    drop.addEventListener("drop", function(e){
+      onFiles(Array.from(e.dataTransfer.files || []).filter(accept));
+    });
+  }
+
+  function isImage(f){ return f.type.indexOf("image/") === 0; }
+  function isVideo(f){ return f.type.indexOf("video/") === 0; }
+
+  wireDropZone(photoDrop, photoInput, isImage, addVehiclePhotos);
 
   /* =========================================================
      EQUIPO (solo admin)
@@ -630,11 +658,147 @@
     });
   }
 
+/* =========================================================
+     GALERÍA DEL CONCESIONARIO (solo admin): fotos y videos de "Nosotros"
+     ========================================================= */
+  const galleryGrid = document.getElementById("g-grid");
+  const galleryInput = document.getElementById("g-input");
+  const MAX_VIDEO_MB = 50;   /* límite de archivo del plan gratis de Supabase */
+  let galleryItems = [];
+
+  function setGalleryStatus(text){
+    const status = document.getElementById("g-status");
+    status.textContent = text;
+    status.hidden = !text;
+  }
+
+  function renderGallery(){
+    galleryGrid.innerHTML = galleryItems.map(function(g){
+      const media = g.tipo === "video"
+        ? '<video src="' + g.url + '#t=0.5" muted playsinline preload="metadata"></video><span class="media-tag">Video</span>'
+        : '<img src="' + g.url + '" alt="" draggable="false" loading="lazy">';
+      return '<div class="panel-photo" data-id="' + g.id + '">' + media +
+        '<button type="button" class="rm" title="Quitar">×</button>' +
+      '</div>';
+    }).join("") || '<p class="panel-empty">Todavía no hay fotos ni videos.</p>';
+  }
+
+  async function loadGallery(){
+    const { data, error } = await supabaseClient.from("gallery").select("*").order("orden", { ascending: true });
+    if(error){
+      console.error(error);
+      setGalleryStatus("No se pudo cargar la galería. ¿Ya se corrió el SQL de la galería en Supabase?");
+      return;
+    }
+    galleryItems = data;
+    renderGallery();
+  }
+
+  /* Igual que con las fotos de un vehículo: el orden es el de la pantalla */
+  async function saveGalleryOrder(){
+    const changed = [];
+    galleryGrid.querySelectorAll(".panel-photo").forEach(function(el, index){
+      const item = galleryItems.find(function(g){ return g.id === el.getAttribute("data-id"); });
+      if(item && item.orden !== index) changed.push({ item: item, orden: index });
+    });
+    if(changed.length === 0) return;
+
+    setGalleryStatus("Guardando el orden…");
+    const results = await Promise.all(changed.map(function(c){
+      return supabaseClient.from("gallery").update({ orden: c.orden }).eq("id", c.item.id);
+    }));
+    if(results.some(function(r){ return r.error; })){
+      setGalleryStatus("No se pudo guardar el orden. Inténtalo de nuevo.");
+      loadGallery();
+      return;
+    }
+    changed.forEach(function(c){ c.item.orden = c.orden; });
+    setGalleryStatus("Orden guardado.");
+  }
+
+  if(typeof Sortable !== "undefined"){
+    Sortable.create(galleryGrid, {
+      animation: 150,
+      draggable: ".panel-photo",
+      filter: "button",
+      preventOnFilter: false,
+      delay: 150,
+      delayOnTouchOnly: true,
+      onEnd: saveGalleryOrder
+    });
+  }
+
+  galleryGrid.addEventListener("click", async function(e){
+    if(!e.target.closest(".rm")) return;
+    const el = e.target.closest(".panel-photo");
+    const id = el.getAttribute("data-id");
+    const item = galleryItems.find(function(g){ return g.id === id; });
+    if(!confirm(item && item.tipo === "video" ? "¿Quitar este video?" : "¿Quitar esta foto?")) return;
+    const { error } = await supabaseClient.from("gallery").delete().eq("id", id);
+    if(error){ alert("No se pudo quitar: " + error.message); return; }
+    if(item) await removeFile("galeria", item.url);
+    galleryItems = galleryItems.filter(function(g){ return g.id !== id; });
+    el.remove();
+    if(galleryItems.length === 0) renderGallery();
+    setGalleryStatus("");
+  });
+
+  /* Las fotos se reducen como las de los vehículos; los videos se suben tal
+     cual, siempre que no pasen de MAX_VIDEO_MB. Suben de a 2 y quedan al final. */
+  async function addGalleryFiles(files){
+    const tooBig = files.filter(function(f){ return isVideo(f) && f.size > MAX_VIDEO_MB * 1024 * 1024; });
+    files = files.filter(function(f){ return tooBig.indexOf(f) === -1; });
+    if(files.length === 0){
+      if(tooBig.length) setGalleryStatus("Estos videos pasan de " + MAX_VIDEO_MB + " MB y no se subieron: " + tooBig.map(function(f){ return f.name; }).join(", "));
+      return;
+    }
+
+    const firstOrden = galleryItems.reduce(function(max, g){ return Math.max(max, g.orden + 1); }, 0);
+    const failed = [];
+    let next = 0, done = 0;
+    setGalleryStatus("Subiendo 0 de " + files.length + "…");
+
+    async function worker(){
+      while(next < files.length){
+        const index = next++;
+        const file = files[index];
+        try{
+          const video = isVideo(file);
+          const upload = video ? { blob: file, ext: file.name.split(".").pop() } : await compressImage(file);
+          const path = Date.now() + "-" + Math.random().toString(36).slice(2,8) + "." + upload.ext;
+          const url = await uploadFile("galeria", path, upload.blob);
+          const { error } = await supabaseClient.from("gallery").insert({ url: url, tipo: video ? "video" : "foto", orden: firstOrden + index });
+          if(error) throw error;
+        } catch(err){
+          console.error("Error subiendo " + file.name, err);
+          failed.push(file.name);
+        }
+        done++;
+        setGalleryStatus("Subiendo " + done + " de " + files.length + "…");
+      }
+    }
+    await Promise.all([worker(), worker()]);
+    await loadGallery();
+
+    const notes = [];
+    notes.push(files.length - failed.length === 1 ? "1 archivo subido." : (files.length - failed.length) + " archivos subidos.");
+    if(failed.length) notes.push("No se pudieron subir: " + failed.join(", ") + ".");
+    if(tooBig.length) notes.push("Pasan de " + MAX_VIDEO_MB + " MB y no se subieron: " + tooBig.map(function(f){ return f.name; }).join(", ") + ".");
+    setGalleryStatus(notes.join(" "));
+  }
+
+  galleryInput.addEventListener("change", async function(e){
+    await addGalleryFiles(Array.from(e.target.files || []));
+    e.target.value = "";
+  });
+  wireDropZone(document.getElementById("g-drop"), galleryInput, function(f){ return isImage(f) || isVideo(f); }, addGalleryFiles);
+
   /* ---------- Carga inicial ---------- */
   await loadVehicles();
   if(isAdmin){
     await loadTeam();
     await loadHappyClients();
+    await loadGallery();
   }
 })();
 </script>

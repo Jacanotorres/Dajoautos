@@ -64,7 +64,17 @@
   </div>
 </section>
 
-<section class="bg-card" id="clientes-felices">
+<section class="bg-card" id="galeria">
+  <div class="wrap">
+    <div class="section-head center">
+      <p class="kicker">Nuestro concesionario</p>
+      <h2>Conoce nuestras instalaciones</h2>
+    </div>
+    <div class="gallery-grid" id="gallery-grid"></div>
+  </div>
+</section>
+
+<section id="clientes-felices">
   <div class="wrap">
     <div class="section-head center">
       <p class="kicker">Clientes felices</p>
@@ -74,7 +84,7 @@
   </div>
 </section>
 
-<section id="equipo">
+<section class="bg-card" id="equipo">
   <div class="wrap">
     <div class="section-head center">
       <p class="kicker">Conoce nuestro equipo</p>
@@ -163,6 +173,28 @@
 <script src="assets/js/main.js"></script>
 <script>
   document.addEventListener("DOMContentLoaded", async function(){
+    /* Galería: los videos se ven ahí mismo; las fotos se abren en grande */
+    const galleryGrid = document.getElementById("gallery-grid");
+    const gallery = await fetchGallery();
+    fillOrHideSection(galleryGrid, gallery.map(function(g){
+      return g.tipo === "video"
+        ? '<div class="gallery-item gallery-video"><video src="' + g.url + '#t=0.5" controls playsinline preload="metadata"></video></div>'
+        : '<button type="button" class="gallery-item" data-full="' + g.url + '" aria-label="Ver foto en grande"><img src="' + g.url + '" alt="Instalaciones de Dajoautos" loading="lazy"></button>';
+    }).join(""));
+    galleryGrid.addEventListener("click", function(e){
+      const item = e.target.closest("[data-full]");
+      if(!item) return;
+      const box = document.createElement("div");
+      box.className = "lightbox";
+      box.innerHTML = '<img src="' + item.getAttribute("data-full") + '" alt="Instalaciones de Dajoautos">' +
+        '<button type="button" class="lightbox-close" aria-label="Cerrar">×</button>';
+      function close(){ box.remove(); document.removeEventListener("keydown", onKey); }
+      function onKey(ev){ if(ev.key === "Escape") close(); }
+      box.addEventListener("click", close);
+      document.addEventListener("keydown", onKey);
+      document.body.appendChild(box);
+    });
+
     const happyClients = await fetchHappyClients();
     fillOrHideSection(document.getElementById("clientes-grid-all"), renderClientPhotos(happyClients));
 
