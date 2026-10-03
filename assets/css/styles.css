@@ -155,6 +155,20 @@ nav.main-nav a:hover, nav.main-nav a.active{border-color:var(--gold);color:var(-
     radial-gradient(ellipse 70% 130% at 88% 0%, rgba(221,174,76,0.15), transparent 62%),
     var(--ink);
 }
+/* Con foto de fondo: clase "has-photo" + variable --hero-photo con la imagen
+   y, si hace falta, --hero-pos para elegir qué parte de la foto se ve.
+   La foto se oscurece hacia la izquierda, donde va el texto. */
+.page-hero.has-photo{
+  padding:140px 0 96px;border-bottom:none;
+  background:
+    linear-gradient(90deg, rgba(5,5,5,0.9) 0%, rgba(5,5,5,0.62) 55%, rgba(5,5,5,0.38) 100%),
+    linear-gradient(180deg, transparent 62%, var(--ink) 100%),
+    var(--hero-photo) var(--hero-pos, center) / cover no-repeat,
+    var(--ink);
+}
+.page-hero.has-photo h1{text-shadow:0 2px 18px rgba(0,0,0,0.6);}
+.page-hero.has-photo p:not(.kicker){color:var(--charcoal);}
+@media (max-width:640px){ .page-hero.has-photo{padding:96px 0 64px;} }
 .page-hero h1{font-size:clamp(32px,4.6vw,50px);}
 .page-hero p:not(.kicker){color:var(--muted-on-dark);margin-top:14px;max-width:56ch;font-size:17.5px;}
 
@@ -166,15 +180,17 @@ nav.main-nav a:hover, nav.main-nav a.active{border-color:var(--gold);color:var(-
   align-items:center;
   padding:90px 0 80px;
   background:
-    radial-gradient(ellipse 62% 46% at 50% 30%, rgba(221,174,76,0.2), transparent 70%),
-    linear-gradient(180deg,#000 0%,var(--ink) 100%);
+    radial-gradient(ellipse 62% 46% at 50% 30%, rgba(221,174,76,0.16), transparent 70%),
+    linear-gradient(180deg, rgba(5,5,5,0.74) 0%, rgba(5,5,5,0.64) 45%, rgba(10,10,10,0.92) 86%, var(--ink) 100%),
+    var(--hero-photo, none) var(--hero-pos, center) / cover no-repeat,
+    #000;
   border-bottom:1px solid var(--line);
 }
 .hero .wrap{max-width:760px;margin:0 auto;text-align:center;width:100%;}
 .hero-logo{width:min(480px,80vw);height:auto;margin:0 auto 34px;filter:drop-shadow(0 12px 30px rgba(0,0,0,0.7));}
 .hero h1{font-size:clamp(36px,5.2vw,58px);}
 .hero h1 span{background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
-.hero p.lede{font-size:19px;color:var(--muted-on-dark);max-width:52ch;margin:18px auto 0;}
+.hero p.lede{font-size:19px;color:var(--charcoal);max-width:52ch;margin:18px auto 0;}
 .hero-cta{display:flex;align-items:center;justify-content:center;gap:16px;margin-top:34px;flex-wrap:wrap;}
 @media (max-width:900px){
   .hero{min-height:74vh;padding:70px 0 64px;}
