@@ -453,6 +453,10 @@ section{padding:76px 0;}
 @media (max-width:900px){ .team-grid{grid-template-columns:repeat(2,1fr);} }
 @media (max-width:640px){ .team-grid-3{grid-template-columns:1fr !important;} }
 
+/* ---------- Nuestra historia ---------- */
+.story p{font-size:18px;line-height:1.7;color:var(--charcoal);margin-bottom:18px;}
+.story .story-close{font-weight:700;color:var(--cream);margin-bottom:0;}
+
 /* ---------- Tarjetas de texto ---------- */
 .feature-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
 .feature-card{background:var(--card);border:1px solid var(--line);border-top:2px solid var(--gold);border-radius:16px;padding:28px;}
