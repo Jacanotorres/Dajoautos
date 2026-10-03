@@ -483,6 +483,7 @@ button.gallery-item:hover img{transform:scale(1.04);}
 }
 
 /* ---------- Financiación ---------- */
+.gold-text{background:var(--gold-grad);-webkit-background-clip:text;background-clip:text;color:transparent;}
 .finance-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;}
 .finance-card{background:var(--card);border:1px solid var(--line);border-top:2px solid var(--gold);border-radius:16px;padding:30px;}
 .finance-card h3{font-size:24px;margin-bottom:10px;}
