@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Inventario de vehículos — Dajoautos</title>
-<meta name="description" content="Explora el inventario disponible de Dajoautos. Filtra por marca, modelo, año y precio.">
+<title>Financiación — Dajoautos</title>
+<meta name="description" content="Financia tu vehículo con Dajoautos. Trabajamos con varias entidades bancarias: conoce los requisitos para empleados e independientes.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700;800&family=Karla:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/styles.css">
-<link rel="preload" as="image" href="/assets/img/fondo-inventario.webp">
+<link rel="preload" as="image" href="/assets/img/fondo-financiacion.webp">
 </head>
 <body>
 
@@ -20,68 +20,67 @@
     </a>
     <button class="nav-toggle" aria-label="Abrir menú" aria-expanded="false"><span></span></button>
     <nav class="main-nav">
-      <a href="inventario.html" class="active">Inventario</a>
+      <a href="inventario.html">Inventario</a>
       <a href="vende-tu-carro.html">Vender mi carro</a>
-      <a href="financiacion.html">Financiación</a>
+      <a href="financiacion.html" class="active">Financiación</a>
       <a href="nosotros.html">Nosotros</a>
       <a href="contacto.html">Contacto</a>
     </nav>
     <div class="header-actions">
       <div class="header-phone" data-hide-if-empty><span>Escríbenos ahora</span><strong data-contact="phone"></strong></div>
       <a id="header-auth-link" class="btn btn-ghost btn-sm" href="panel.html" hidden>Panel</a>
-      <a class="btn btn-primary" data-wa-text="Hola, quiero más información sobre el inventario" target="_blank" rel="noopener">WhatsApp</a>
+      <a class="btn btn-primary" data-wa-text="Hola, quiero información sobre financiación para un vehículo" target="_blank" rel="noopener">WhatsApp</a>
     </div>
   </div>
 </header>
 <div class="nav-scrim"></div>
 
-<section class="page-hero has-photo" style="--hero-photo:url('/assets/img/fondo-inventario.webp');--hero-pos:center 55%">
+<section class="page-hero has-photo" style="--hero-photo:url('/assets/img/fondo-financiacion.webp');--hero-pos:center 52%">
   <div class="wrap">
-    <p class="kicker">Nuestro inventario</p>
-    <h1>Encuentra tu próximo carro</h1>
-    <p>Filtra por marca, modelo, año y precio para encontrar el vehículo que mejor se adapte a ti.</p>
+    <p class="kicker">Financiación</p>
+    <h1>Financia tu próximo vehículo</h1>
+    <p>Trabajamos con varias entidades bancarias para ayudarte a financiar tu carro. Revisa los requisitos y envíanos tus documentos.</p>
   </div>
 </section>
 
 <section class="section-tight">
   <div class="wrap">
-    <div class="search-panel">
-      <div class="search-row row-3">
-        <div class="field"><label for="f-marca">Marca</label><select id="f-marca"></select></div>
-        <div class="field"><label for="f-linea">Modelo</label><input id="f-linea" type="text" placeholder="Ej: CX-5, Fortuner..."></div>
-        <div class="field"><label for="f-anio">Año</label><input id="f-anio" type="number" placeholder="Ej: 2022"></div>
+    <div class="section-head center">
+      <p class="kicker">Requisitos</p>
+      <h2>Documentos para solicitar tu crédito</h2>
+      <p>Prepara estos documentos según tu actividad.</p>
+    </div>
+    <div class="finance-grid">
+      <div class="finance-card">
+        <h3>Si eres empleado</h3>
+        <div class="buy-list">
+          <div class="buy-row"><div class="check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#DDAE4C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><h4>Cédula por ambos lados</h4></div></div>
+          <div class="buy-row"><div class="check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#DDAE4C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><h4>Carta laboral con menos de 30 días de expedida</h4></div></div>
+          <div class="buy-row"><div class="check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#DDAE4C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><h4>Desprendibles de pago de los últimos 3 meses</h4></div></div>
+          <div class="buy-row"><div class="check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#DDAE4C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><h4>Extractos bancarios de los últimos 3 meses</h4></div></div>
+        </div>
       </div>
-      <div class="search-row row-2">
-        <div class="field"><label for="f-precio-min">Precio mínimo</label><input id="f-precio-min" type="number" placeholder="$"></div>
-        <div class="field"><label for="f-precio-max">Precio máximo</label><input id="f-precio-max" type="number" placeholder="$"></div>
-      </div>
-      <div class="search-actions" style="justify-content:flex-end;">
-        <button id="f-reset" class="btn btn-ghost" type="button">Limpiar filtros</button>
+      <div class="finance-card">
+        <h3>Si eres independiente</h3>
+        <div class="buy-list">
+          <div class="buy-row"><div class="check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#DDAE4C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><h4>Cédula por ambos lados</h4></div></div>
+          <div class="buy-row"><div class="check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#DDAE4C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><h4>Cámara de comercio y RUT</h4></div></div>
+          <div class="buy-row"><div class="check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#DDAE4C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><h4>Declaración de renta</h4></div></div>
+          <div class="buy-row"><div class="check"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#DDAE4C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div><h4>Extractos bancarios de los últimos 3 meses</h4></div></div>
+        </div>
       </div>
     </div>
-
-    <div class="results-bar">
-      <p class="results-count" id="results-count"></p>
-      <div class="sort-field">
-        <label for="f-sort">Ordenar por</label>
-        <select id="f-sort">
-          <option value="recientes">Más recientes</option>
-          <option value="precio-asc">Menor precio</option>
-          <option value="precio-desc">Mayor precio</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="vehicle-grid" id="vehicle-grid"></div>
+    <p class="finance-note">La aprobación y las condiciones del crédito dependen de cada entidad bancaria.</p>
   </div>
 </section>
 
-<section class="cta" data-hide-if-empty>
+<section class="cta">
   <div class="wrap">
-    <h2>¿No encuentras lo que buscas?</h2>
-    <p>Cuéntanos qué vehículo necesitas y tu presupuesto. Te ayudamos a encontrar opciones.</p>
+    <h2>¿Listo para financiar tu carro?</h2>
+    <p>Escríbenos y te ayudamos con tu solicitud.</p>
     <div class="cta-actions">
-      <a class="btn btn-on-dark" data-wa-text="Hola, estoy buscando un vehículo y quiero que me ayuden a encontrar opciones" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+      <a class="btn btn-on-dark" data-wa-text="Hola, quiero información sobre financiación para un vehículo" target="_blank" rel="noopener">Escribir por WhatsApp</a>
+      <a class="btn btn-outline-dark" href="inventario.html">Ver vehículos</a>
     </div>
   </div>
 </section>
@@ -127,7 +126,7 @@
   </div>
 </footer>
 
-<a class="float-wa" data-wa-text="Hola, quiero más información" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp">
+<a class="float-wa" data-wa-text="Hola, quiero información sobre financiación para un vehículo" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp">
   <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M17.6 6.32A8.87 8.87 0 0 0 12.05 4a8.94 8.94 0 0 0-7.75 13.4L3 21l3.7-1.28a8.9 8.9 0 0 0 5.35 1.75h.01a8.94 8.94 0 0 0 5.55-16.15Z" fill="#fff"/><path d="M9.1 8.6c-.16-.36-.33-.37-.48-.37h-.4a.78.78 0 0 0-.58.27c-.2.22-.77.75-.77 1.83s.79 2.12.9 2.27c.11.15 1.55 2.5 3.83 3.4 1.9.75 2.28.6 2.7.56.42-.03 1.35-.55 1.54-1.08.19-.53.19-.98.13-1.08-.06-.1-.2-.15-.42-.27-.22-.11-1.35-.67-1.55-.74-.21-.08-.36-.11-.51.11-.15.22-.58.74-.71.9-.13.15-.26.16-.48.05-.22-.11-.94-.35-1.79-1.1a6.7 6.7 0 0 1-1.24-1.55c-.13-.22-.01-.34.1-.45.1-.1.22-.26.33-.4.11-.13.15-.22.22-.37.07-.15.04-.28-.02-.4-.06-.11-.5-1.28-.7-1.76Z" fill="#2F5233"/></svg>
 </a>
 
@@ -151,8 +150,6 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="assets/js/supabase-client.js"></script>
 <script src="assets/js/data.js"></script>
-<script src="assets/js/db.js"></script>
 <script src="assets/js/main.js"></script>
-<script src="assets/js/catalog.js"></script>
 </body>
 </html>

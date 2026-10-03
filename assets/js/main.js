@@ -91,7 +91,10 @@ document.addEventListener("DOMContentLoaded", function(){
   const authLink = document.getElementById("header-auth-link");
   if(authLink && typeof supabaseClient !== "undefined"){
     supabaseClient.auth.getSession().then(function(res){
-      if(res.data.session) authLink.hidden = false;
+      if(res.data.session){
+        authLink.hidden = false;
+        document.body.classList.add("logged-in");
+      }
     });
   }
 
